@@ -1,12 +1,47 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Controlo por Voz</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #2d89ef, #103778);
+      color: white;
+      text-align: center;
+      width: 250px;
+      height: 150px;
+    }
+    h1 {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      background-color: #00c853;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #009624;
+    }
+    .info {
+      margin-top: 15px;
+      font-size: 12px;
+      opacity: 0.8;
+    }
+  </style>
 </head>
 <body>
+  <h1>🎤 Controlo por Voz</h1>
   <button id="start">Começar</button>
-  <p id="status">Parado</p>
+  <div class="info">Diz "ajuda" para ver os comandos</div>
   <script src="popup.js"></script>
 </body>
 </html>
