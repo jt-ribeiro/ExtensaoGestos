@@ -12,7 +12,7 @@
       color: white;
       text-align: center;
       width: 250px;
-      height: 150px;
+      height: 180px;
     }
     h1 {
       font-size: 18px;
@@ -27,9 +27,16 @@
       border-radius: 8px;
       cursor: pointer;
       transition: background-color 0.3s;
+      margin: 5px;
     }
     button:hover {
       background-color: #009624;
+    }
+    .stop {
+      background-color: #e53935;
+    }
+    .stop:hover {
+      background-color: #b71c1c;
     }
     .info {
       margin-top: 15px;
@@ -41,7 +48,8 @@
 <body>
   <h1>🎤 Controlo por Voz</h1>
   <button id="start">Começar</button>
-  <div class="info">Diz "ajuda" para ver os comandos</div>
+  <button id="stop" class="stop">Parar</button>
+  <div class="info">Diz "ajuda" ou "desligar extensão"</div>
   <script src="popup.js"></script>
 </body>
 </html>

@@ -4,9 +4,15 @@ if (!window.__vozIniciada) {
 
   let recognizer = null;
 
-  // Ouve a mensagem que vem do popup
+  // Verifica o estado salvo ao carregar a página
+  chrome.storage.local.get('vozAtiva', dados => {
+    if (dados.vozAtiva) iniciarReconhecimento();
+  });
+
+  // Recebe mensagens do popup
   chrome.runtime.onMessage.addListener((msg, _sender, _resp) => {
     if (msg.action === 'start-voice') iniciarReconhecimento();
+    if (msg.action === 'stop-voice') pararReconhecimento();
   });
 
   function iniciarReconhecimento() {
@@ -16,8 +22,7 @@ if (!window.__vozIniciada) {
       return;
     }
 
-    // Se já estava ligado não volta a ligar
-    if (recognizer) return;
+    if (recognizer) return; // já está ativo
 
     recognizer = new SR();
     recognizer.lang = 'pt-PT';
@@ -34,11 +39,19 @@ if (!window.__vozIniciada) {
     };
     recognizer.onerror = err => console.error('Erro:', err.error);
     recognizer.onend = () => {
-      // Se a página recarregar o script volta a correr, por isso basta parar
       recognizer = null;
+      console.log('🎤 Reconhecimento parado.');
     };
 
     recognizer.start();
+  }
+
+  function pararReconhecimento() {
+    if (recognizer) {
+      recognizer.stop();
+      recognizer = null;
+      console.log('🎤 Reconhecimento parado manualmente.');
+    }
   }
 
   function executarComando(c) {
@@ -56,12 +69,17 @@ if (!window.__vozIniciada) {
              c.includes('atualizar'))       location.reload();
     else if (c.startsWith('abrir página'))  abrir(c.replace('abrir página', ''));
     else if (c.includes('subir'))           window.scrollBy(0, -200);
-    else if (c.includes('descer'))          window.scrollBy(0,  200);
+    else if (c.includes('descer'))          window.scrollBy(0, 200);
     else if (c.includes('zoom in'))         zoom(+0.1);
     else if (c.includes('zoom out'))        zoom(-0.1);
     else if (c.includes('ajuda') ||
              c.includes('assistência'))
-      alert('Comandos: voltar, avançar, recarregar, abrir página ..., subir, descer, zoom in/out …');
+      alert('Comandos: voltar, avançar, recarregar, abrir página ..., subir, descer, zoom in/out, parar extensão …');
+    else if (c.includes('parar extensão') ||
+             c.includes('desligar extensão')) {
+      chrome.storage.local.set({ vozAtiva: false });
+      pararReconhecimento();
+    }
 
     function zoom(delta) {
       const z = parseFloat(document.body.style.zoom || 1) + delta;
