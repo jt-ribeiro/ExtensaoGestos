@@ -17,9 +17,15 @@ function iniciarReconhecimento() {
   recognition.interimResults = false;
 
   recognition.onstart = () => console.log("🎙️ A ouvir comandos de voz...");
+  
   recognition.onresult = (event) => {
     const comando = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
     console.log("🗣️ Comando reconhecido:", comando);
+
+    // 🔍 Log especial para comandos relacionados com gestos
+    if (comando.includes("gesto") || comando.includes("gestos")) {
+      console.log("🖐️ Comando de gesto detetado:", comando);
+    }
 
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.scripting.executeScript({
