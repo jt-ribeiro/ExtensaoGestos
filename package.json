@@ -1,0 +1,35 @@
+{
+  "name": "gesture-extension",
+  "version": "1.0.0",
+  "description": "Uma extensão de navegador para reconhecimento de gestos usando TensorFlow.js.",
+  "main": null,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.config.js && npm run copy-assets",
+    "copy-assets": "powershell -Command \"New-Item -ItemType Directory -Path dist/src -Force; Copy-Item -Path src/popup.html -Destination dist/src/popup.html; Copy-Item -Path manifest.json -Destination dist/manifest.json\""
+  },
+  "keywords": [
+    "browser-extension",
+    "gestures",
+    "tensorflow",
+    "handpose",
+    "chrome-extension",
+    "firefox-extension"
+  ],
+  "author": "Seu Nome ou Nome da Organização",
+  "license": "ISC",
+  "dependencies": {
+    "@tensorflow/tfjs-core": "^4.22.0",
+    "@tensorflow/tfjs-backend-webgl": "^4.22.0",
+    "@tensorflow/tfjs-converter": "^4.22.0",
+    "@tensorflow-models/handpose": "^0.1.0"
+  },
+  "devDependencies": {
+    "parcel": "^2.12.0",
+    "webpack": "^5.94.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "browserslist": [
+    "last 1 Chrome version"
+  ]
+}

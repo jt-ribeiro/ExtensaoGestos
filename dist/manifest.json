@@ -1,0 +1,26 @@
+{
+    "manifest_version": 3,
+    "name": "Controle por Gestos",
+    "version": "1.0",
+    "description": "Controla o navegador com gestos usando TensorFlow.js",
+    "permissions": [
+      "contextMenus",
+      "activeTab",
+      "scripting"
+    ],
+    "host_permissions": [
+      "<all_urls>"
+    ],
+    "background": {
+      "service_worker": "src/service_worker.js"
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["src/content.js"]
+      }
+    ],
+    "action": {
+      "default_popup": "src/popup.html"
+    }
+  }
