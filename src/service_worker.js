@@ -19,10 +19,45 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.action === 'toggleGestureControl') {
-    chrome.scripting.executeScript({
-      target: { tabId: sender.tab.id },
-      files: ['src/content.js']
-    });
-  }
-});
+    const { action, tabId } = message;
+    console.log('Mensagem recebida no service worker:', message);
+  
+    if (!tabId) return;
+  
+    if (action === 'startGestureControl') {
+      chrome.scripting.executeScript({
+        target: { tabId },
+        files: ['src/content.js']
+      });
+    }
+  
+    if (action === 'pauseGestureControl') {
+      chrome.scripting.executeScript({
+        target: { tabId },
+        func: () => {
+          console.log('Pausando gestos...');
+          window.__gesturePaused = true;
+        }
+      });
+    }
+  
+    if (action === 'stopGestureControl') {
+      chrome.scripting.executeScript({
+        target: { tabId },
+        func: () => {
+          console.log('Encerrando controle de gestos...');
+          const container = document.getElementById('gesture-video-container');
+          if (container) {
+            const video = container.querySelector('video');
+            if (video?.srcObject) {
+              video.srcObject.getTracks().forEach(t => t.stop());
+            }
+            container.remove();
+          }
+          window.__gesturePaused = false;
+          window.__gestureStop = true;
+        }
+      });
+    }
+  });
+  
